@@ -13,36 +13,29 @@ enum UnitMeasurement: String {
   case kilometers = "Kilometers"
 }
 
+enum DefaultImage: String {
+  case run = "run"
+  case bike = "bike"
+}
+
 struct UserPreferenceKey {
   static let unitMeasurement = "Unit Measurement"
+  static let defaultImage = "Default Image"
 }
 
 class UserPreference {
-  
-  // a Singleton's initializer NEEDS to be private - this ensures that
-  // ONLY one instance of this class is used throughout the application
   private init() {}
     
   static let shared = UserPreference()
   
-  // set a user defaults value (object)
-  func updateUnitMeasurement(with unit: UnitMeasurement) {
-    // storing or persiting the unit measurment value to UserDefaults (device or simimular as permanent storage)
-    
-    // UserDefaults.standard is a Singleton in iOS that gives us access to
-    // saving and retrieving stored data in the device or simulator
-    UserDefaults.standard.set(unit.rawValue, forKey: UserPreferenceKey.unitMeasurement)
-    
-    // key is "Unit Measurement"
-    // value is either "Miles" or "Kilometers"
-    // UserDefaults: ["Unit Measurement" : "Kilometers"]
+  func updateDefaults<T>(with value: T, for key: String) {
+    UserDefaults.standard.set(value, forKey: key)
   }
   
-  // retrieve a user defaults value (object)
-  func getUnitMeasurement() -> UnitMeasurement? {
-    guard let unitMeasurement = UserDefaults.standard.object(forKey: UserPreferenceKey.unitMeasurement) as? String else {
+  func getDefaultValue<T>(for key: String) -> T? {
+    guard let value = UserDefaults.standard.object(forKey: key) as? T else {
       return nil
     }
-    return UnitMeasurement(rawValue: unitMeasurement)
+    return value
   }
 }

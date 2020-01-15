@@ -11,39 +11,43 @@ import UIKit
 class SettingsViewController: UITableViewController {
   
   @IBOutlet weak var unitMeasurementLabel: UILabel!
+  @IBOutlet weak var defaultImageView: UIImageView!
   
-  var currentUnit = UnitMeasurement.miles {
-    
+  private var currentUnit = UnitMeasurement.miles {
     didSet {
-      // update the unitMeasurement label
-      unitMeasurementLabel.text = currentUnit.rawValue // "Miles" or "Kilometers"
-      
-      // update value in user defaults
-      UserPreference.shared.updateUnitMeasurement(with: currentUnit)
+      unitMeasurementLabel.text = currentUnit.rawValue
+      UserPreference.shared.updateDefaults(with: currentUnit.rawValue, for: UserPreferenceKey.unitMeasurement)
+    }
+  }
+  
+  private var currentImage = DefaultImage.bike {
+    didSet {
+      defaultImageView.image = UIImage(named: currentImage.rawValue)
+      UserPreference.shared.updateDefaults(with: currentImage.rawValue, for: UserPreferenceKey.defaultImage)
     }
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     updateUI()
   }
   
   private func updateUI() {
-    // retrieve any values in UserDefaults as needed
-    if let unitMeasurement = UserPreference.shared.getUnitMeasurement() {
-      currentUnit = unitMeasurement
-    }
+    let unitString: String = UserPreference.shared.getDefaultValue(for: UserPreferenceKey.unitMeasurement) ?? ""
+    let unitMeasurement = UnitMeasurement(rawValue: unitString) ?? UnitMeasurement.miles
+    currentUnit = unitMeasurement
+    
+    let defaultImageString: String = UserPreference.shared.getDefaultValue(for: UserPreferenceKey.defaultImage) ?? ""
+    let defaultImage = DefaultImage(rawValue: defaultImageString) ?? DefaultImage.bike
+    currentImage = defaultImage
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
-    // toggle between "Miles" or "Kilometers"
-    
     switch indexPath.row {
     case 0:
-      // toggle unit measurement label
       toggleUnitMeasurement()
+    case 1:
+      toggleDefaultImage()
     default:
       break
     }
@@ -53,5 +57,7 @@ class SettingsViewController: UITableViewController {
     currentUnit = (currentUnit == UnitMeasurement.miles) ? UnitMeasurement.kilometers : UnitMeasurement.miles
   }
   
-  
+  private func toggleDefaultImage() {
+     currentImage = (currentImage == DefaultImage.bike) ? DefaultImage.run : DefaultImage.bike
+   }
 }
