@@ -6,7 +6,7 @@ Introduction to data persistence using UserDefaults. UserDefaults is a storage m
 
 On the **master** branch UserDefaults is used to persist (save) the unit measurment that the user prefers, that being miles or kilometers. A todo item was left on the master branch so a default image could be choosen and persisted to the device via UserDefaults. 
 
-The solution to the todo above is on the [generics-refactor](https://github.com/alexpaul/UserDefaults-Demo/tree/generics-refactor) branch (you can view the files from this link, the **generics-branch** makes use of Generics to to persist both the unit measuremnt and the default image. 
+The solution to the todo above is on the [generics-refactor](https://github.com/alexpaul/UserDefaults-Demo/blob/generics-refactor/UserDefaults-Demo/UserPreference.swift) branch (you can view the files from this link, the **generics-branch** makes use of Generics to to persist both the unit measuremnt and the default image. 
 
 ## Branching Instructions 
 
